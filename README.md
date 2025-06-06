@@ -8,8 +8,10 @@
 - ant-design
 
 ### 如何运行和测试项目
-  npm install(yarn)
-  npm run dev(yarn dev)
+
+npm install(yarn)
+
+npm run dev(yarn dev)
 
 ### 实现了哪些功能和加分项（可打勾）
 
