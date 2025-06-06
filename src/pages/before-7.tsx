@@ -2,6 +2,8 @@ import { Line } from "@ant-design/charts";
 import { apiGetCurrencyHistory } from "../api/currencyApi";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { JudgetExpire } from "../lib/cache-data";
+import { CURRENCY_HISTORY } from "../lib/const";
 
 interface Props {
   from: string;
@@ -11,19 +13,19 @@ function Before7({ from, to }: Props) {
   const { t } = useTranslation();
   const [chartData, setChartData] = useState<{ date: string; rate: number }[]>([]);
   useEffect(() => {
-    const end = new Date();
-    const start = new Date();
-    start.setDate(end.getDate() - 6);
-    const format = (d: Date) => d.toISOString().slice(0, 10);
-
-    apiGetCurrencyHistory(from, to, format(start), format(end)).then((res) => {
-      const rates = res.data.rates;
-      const data = Object.keys(rates).map((date) => ({
-        date,
-        rate: rates[date][to],
-      }));
-      setChartData(data);
-    });
+    const cacheData = JudgetExpire(from + to + CURRENCY_HISTORY, 60 * 60 * 1000 * 24);
+    if (cacheData) {
+      setChartData(cacheData.data);
+    } else {
+      apiGetCurrencyHistory(from, to)
+        .then((res) => {
+          setChartData(res);
+        })
+        .catch((err) => {
+          console.error("Failed to fetch currency history:", err);
+          setChartData([]);
+        });
+    }
   }, [from, to]);
   return (
     <>

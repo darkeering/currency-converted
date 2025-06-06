@@ -7,6 +7,8 @@ import { debounce } from "lodash";
 import { SwapOutlined } from "@ant-design/icons";
 import Before7 from "./before-7";
 import { useTranslation } from "react-i18next";
+import { JudgetExpire } from "../lib/cache-data";
+import { CURRENCY_RATES_CACHE } from "../lib/const";
 
 function Home() {
   const { t, i18n } = useTranslation();
@@ -19,12 +21,23 @@ function Home() {
   const [history, setHistory] = useState<DataType[]>([]);
 
   useEffect(() => {
-    setLoading(true);
-    apiGetCurrencyConverted()
-      .then((res) => {
-        setRates(res.data.rates);
-      })
-      .finally(() => setLoading(false));
+    const cacheData = JudgetExpire(CURRENCY_RATES_CACHE);
+    if (cacheData) {
+      setRates(cacheData.data);
+      setLoading(false);
+    } else {
+      setLoading(true);
+      apiGetCurrencyConverted()
+        .then((res) => {
+          setRates(res);
+        })
+        .catch((err) => {
+          console.error("Failed to fetch currency rates:", err);
+          setRates({});
+        })
+        .finally(() => setLoading(false));
+    }
+
     const local = localStorage.getItem("exchange_history");
     if (local) {
       setHistory(JSON.parse(local));
