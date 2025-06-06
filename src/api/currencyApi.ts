@@ -28,3 +28,7 @@ service.interceptors.response.use(
 export const apiGetCurrencyConverted = () => {
   return service.get(`/api/v1/latest`);
 };
+
+export const apiGetCurrencyHistory = (from: string, to: string, start: string, end: string) => {
+  return service.get(`/api/v1/${start}..${end}?from=${from}&to=${to}`);
+};
