@@ -35,14 +35,14 @@ function Before7({ from, to }: Props) {
         xAxis={{
           title: {
             text: t("日期"),
-            position: "end", // 明确指定位置
+            position: "end",
             style: { fontSize: 14 },
           },
         }}
         yAxis={{
           title: {
             text: `${t(from)} ${t("兑")} ${t(to)}`,
-            position: "center", // 明确指定位置
+            position: "center",
             style: { fontSize: 14 },
           },
         }}

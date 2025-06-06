@@ -1,54 +1,34 @@
-# React + TypeScript + Vite
+### 使用的技术栈
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+- react
+- react-i18next
+- tailwandcss
+- react
+- lodash
+- ant-design
 
-Currently, two official plugins are available:
+### 如何运行和测试项目
+  npm install(yarn)
+  npm run dev(yarn dev)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### 实现了哪些功能和加分项（可打勾）
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+- 基础兑换功能
+  - [x] 用户可以选择“源货币（From）”和“目标货币（To）”。
+  - [x] 用户可以输入兑换金额
+  - [x] 实时显示兑换结果。
+- 反转货币对
+  - [x] 一键反转“源货币”和“目标货币”。
+- 兑换历史记录
+  - [x] 支持在表格中查看历史兑换记录。
+  - [x] 数据保存在`localStorage`中
+- 界面与体验
+  - [x] UI 设计简洁现代
+  - [x] 支持响应式设计，适配移动端和桌面端
+- 加分项
+  - [x] 使用 TypeScript 开发
+  - [x] 使用图表展示近 7 天汇率变动（折线图）
+  - [x] 支持中英文切换（i18n）。
+  - [x] 使用 Tailwind CSS 或其他 UI 库。
+  - [ ] 使用测试框架（如 Vitest / Jest）编写 1~2 个简单测试。
+  - [x] 汇率数据缓存，减少重复 API 请求。
