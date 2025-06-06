@@ -3,8 +3,8 @@
 - react
 - react-i18next
 - tailwandcss
-- react
 - lodash
+- axios
 - ant-design
 
 ### 如何运行和测试项目
