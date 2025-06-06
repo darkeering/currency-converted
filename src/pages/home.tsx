@@ -1,13 +1,15 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { apiGetCurrencyConverted } from "../api/currencyApi";
-import { InputNumber, Select } from "antd";
+import { Button, InputNumber, Select } from "antd";
 import HistoryTable from "./history-table";
 import type { DataType } from "../types/history-table";
 import { debounce } from "lodash";
 import { SwapOutlined } from "@ant-design/icons";
 import Before7 from "./before-7";
+import { useTranslation } from "react-i18next";
 
 function Home() {
+  const { t, i18n } = useTranslation();
   const [rates, setRates] = useState<{ [key: string]: number }>({});
   const [amount, setAmount] = useState(1);
   const [from, setFrom] = useState("CNY");
@@ -20,7 +22,7 @@ function Home() {
     setLoading(true);
     apiGetCurrencyConverted()
       .then((res) => {
-        setRates({ EUR: 1, ...res.data.rates }); // EUR为基准
+        setRates(res.data.rates);
       })
       .finally(() => setLoading(false));
     const local = localStorage.getItem("exchange_history");
@@ -47,8 +49,10 @@ function Home() {
     const record = {
       key: new Date().getTime().toString(),
       time: new Date().toLocaleString(),
-      from: `${amount} ${from}`,
-      to: `${fixedResult} ${to}`,
+      amount,
+      from,
+      result: fixedResult,
+      to,
     };
     const newHistory = [record, ...history];
     setHistory(newHistory);
@@ -80,27 +84,31 @@ function Home() {
 
   return (
     <div className="p-8">
-      <h2 className="text-2xl font-bold mb-6 text-center text-blue-600">Currency Converted</h2>
+      <div className="flex justify-end mb-4">
+        <Button onClick={() => i18n.changeLanguage("zh")}>中文</Button>
+        <Button onClick={() => i18n.changeLanguage("en")}>English</Button>
+      </div>
+      <h2 className="text-2xl font-bold mb-6 text-center text-blue-600">{t("Currency Converted")}</h2>
       {loading ? (
-        <div className="text-center text-gray-500">loading...</div>
+        <div className="text-center text-gray-500">{t("loading...")}</div>
       ) : (
         <>
           <div className="flex flex-col gap-4 mb-6">
             <div>
-              {amount.toFixed(2)} {from} =
+              {amount.toFixed(2)} {t(from)} =
               <br />
-              {result.toFixed(2)} {to}
+              {result.toFixed(2)} {t(to)}
             </div>
             <div className="flex items-center gap-4">
               <div className="flex flex-col items-center">
-                <Select value={from} style={{ width: 140 }} onChange={handleFromChange} options={currencyOptions.map((cur) => ({ label: cur, value: cur }))} className="mb-2" />
+                <Select value={from} style={{ width: 140 }} onChange={handleFromChange} options={currencyOptions.map((cur) => ({ label: t(cur), value: cur }))} className="mb-2" />
                 <InputNumber min={0} max={1000000} value={amount} precision={2} step={1} onChange={debouncedSetAmmount} style={{ width: 140 }} className="!rounded !border-gray-300" />
               </div>
               <span className="mx-2 flex flex-col items-center">
                 <SwapOutlined style={{ fontSize: "24px", color: "#2563eb", cursor: "pointer" }} onClick={exchange} />
               </span>
               <div className="flex flex-col items-center">
-                <Select value={to} style={{ width: 140 }} onChange={handleToChange} options={currencyOptions.map((cur) => ({ label: cur, value: cur }))} className="mb-2" />
+                <Select value={to} style={{ width: 140 }} onChange={handleToChange} options={currencyOptions.map((cur) => ({ label: t(cur), value: cur }))} className="mb-2" />
                 <InputNumber min={0} max={1000000} value={result !== null ? result : 0} precision={2} step={1} readOnly style={{ width: 140 }} className="!rounded !border-gray-300 bg-gray-50" />
               </div>
             </div>

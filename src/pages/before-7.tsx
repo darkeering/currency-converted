@@ -1,12 +1,14 @@
 import { Line } from "@ant-design/charts";
 import { apiGetCurrencyHistory } from "../api/currencyApi";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   from: string;
   to: string;
 }
 function Before7({ from, to }: Props) {
+  const { t } = useTranslation();
   const [chartData, setChartData] = useState<{ date: string; rate: number }[]>([]);
   useEffect(() => {
     const end = new Date();
@@ -25,7 +27,27 @@ function Before7({ from, to }: Props) {
   }, [from, to]);
   return (
     <>
-      <Line data={chartData} xField="date" yField="rate" point={{ size: 5, shape: "diamond" }} xAxis={{ title: { text: "日期" } }} yAxis={{ title: { text: `${from}兑${to}` } }} height={300} />
+      <Line
+        data={chartData}
+        xField="date"
+        yField="rate"
+        point={{ size: 5, shape: "diamond" }}
+        xAxis={{
+          title: {
+            text: t("日期"),
+            position: "end", // 明确指定位置
+            style: { fontSize: 14 },
+          },
+        }}
+        yAxis={{
+          title: {
+            text: `${t(from)} ${t("兑")} ${t(to)}`,
+            position: "center", // 明确指定位置
+            style: { fontSize: 14 },
+          },
+        }}
+        height={300}
+      />
     </>
   );
 }
